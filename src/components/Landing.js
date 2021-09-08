@@ -2,6 +2,17 @@ import React from 'react';
 import restaurants from '../sample-restaurants';
 
 class Landing extends React.Component {
+    state = {
+        display: false,
+        title: '',
+        url: '',
+    };
+
+    displayList = () => {
+        console.log('click');
+        console.log(this);
+    };
+
     render() {
         restaurants.map((restaurant) => console.log(restaurant));
 
@@ -9,7 +20,9 @@ class Landing extends React.Component {
             <div>
                 <div className="restaurant_select">
                     <div className="restaurant_select_top">
-                        <div className="restaurant_select_top-header font-effect-outline">
+                        <div
+                            onClick={this.displayList}
+                            className="restaurant_select_top-header font-effect-outline">
                             Выберите ресторан
                         </div>
 
