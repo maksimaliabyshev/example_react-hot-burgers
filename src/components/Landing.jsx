@@ -16,7 +16,10 @@ class Landing extends React.Component {
         const { title, url } = restaurant;
         this.setState({ title, url, display: false });
     };
-    goToRestaurant = () => {};
+    goToRestaurant = () => {
+        const { url } = this.state;
+        this.props.history.push(`/restaurant/${url}`);
+    };
 
     render() {
         return (
@@ -31,7 +34,9 @@ class Landing extends React.Component {
                                 : 'Выберите ресторан'}
                         </div>
 
-                        <div className="arrow_picker">
+                        <div
+                            onClick={this.displayList}
+                            className="arrow_picker">
                             <div className="arrow_picker-up"></div>
                             <div className="arrow_picker-down"></div>
                         </div>
