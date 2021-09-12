@@ -17,7 +17,6 @@ class AddBurgerForm extends React.Component {
             image: this.imageRef.current.value,
         };
         this.props.addBurger(burger);
-        console.log(event.currentTarget);
         event.currentTarget.reset();
     };
     render() {

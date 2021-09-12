@@ -12,7 +12,7 @@ class Shipment extends Component {
             ) : (
                 <span>{shipping} ₽</span>
             );
-        console.log(total, '  ', total > 0);
+
         return (
             <div className="total">
                 <div className="total_wrap">

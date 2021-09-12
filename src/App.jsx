@@ -4,6 +4,7 @@ import Order from './components/Order';
 import MenuAdmin from './components/MenuAdmin';
 import Burger from './components/Burger';
 import sampleBurgers from './sample-burgers';
+import base from './base';
 
 class App extends React.Component {
     state = {
@@ -11,10 +12,44 @@ class App extends React.Component {
         order: {},
     };
 
+    componentDidMount() {
+        const { params } = this.props.match;
+
+        const localStorageRef = localStorage.getItem(params.restaurantId);
+        if (localStorageRef) {
+            this.setState({
+                order: JSON.parse(localStorageRef),
+            });
+        }
+        this.ref = base.syncState(`${params.restaurantId}/burgers`, {
+            context: this,
+            state: 'burgers',
+        });
+    }
+    componentDidUpdate(prevProps, prevState) {
+        const { params } = this.props.match;
+        localStorage.setItem(
+            params.restaurantId,
+            JSON.stringify(this.state.order),
+        );
+    }
+    componentWillUnmount() {
+        base.removeBinding(this.ref);
+    }
+
     addBurger = (burger) => {
-        console.log(burger);
         const burgers = { ...this.state.burgers };
         burgers[`burger${Date.now()}`] = burger;
+        this.setState({ burgers });
+    };
+    updateBurger = (key, updatedBurger) => {
+        const burgers = { ...this.state.burgers };
+        burgers[key] = updatedBurger;
+        this.setState({ burgers });
+    };
+    deleteBurger = (key) => {
+        const burgers = { ...this.state.burgers };
+        burgers[key] = null;
         this.setState({ burgers });
     };
 
@@ -26,6 +61,12 @@ class App extends React.Component {
         order[key] = order[key] + 1 || 1;
         this.setState({ order });
     };
+    deleteFromOrder = (key) => {
+        const order = { ...this.state.order };
+        delete order[key];
+        this.setState({ order });
+    };
+
     render() {
         return (
             <div className="burger-paradise">
@@ -44,10 +85,17 @@ class App extends React.Component {
                         })}
                     </ul>
                 </div>
-                <Order burgers={this.state.burgers} order={this.state.order} />
+                <Order
+                    burgers={this.state.burgers}
+                    order={this.state.order}
+                    deleteFromOrder={this.deleteFromOrder}
+                />
                 <MenuAdmin
                     addBurger={this.addBurger}
                     loadSamleBurgers={this.loadSamleBurgers}
+                    burgers={this.state.burgers}
+                    updateBurger={this.updateBurger}
+                    deleteBurger={this.deleteBurger}
                 />
             </div>
         );

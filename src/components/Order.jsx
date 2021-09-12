@@ -6,6 +6,10 @@ class Order extends React.Component {
         const burger = this.props.burgers[key];
         const count = this.props.order[key];
 
+        if (!burger) {
+            return;
+        }
+
         const isAvailable = burger && burger.status === 'available';
         if (!isAvailable) {
             return (
@@ -22,7 +26,11 @@ class Order extends React.Component {
                     <span>{count}</span>
                     шт. {burger.name}
                     <span> {count * burger.price} ₽ </span>
-                    <button className="cancellItem">&times;</button>
+                    <button
+                        onClick={() => this.props.deleteFromOrder(key)}
+                        className="cancellItem">
+                        &times;
+                    </button>
                 </span>
             </li>
         );
